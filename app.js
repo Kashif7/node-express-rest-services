@@ -1,7 +1,19 @@
 const express = require('express');
 
 const app = express();
+const bookRouter = express.Router();
 const port = process.env.PORT || 3000;
+
+// setting up the books API
+bookRouter.route('/books')
+  .get((request, response) => {
+    const responseJSON = {
+      hello: 'This is my API',
+    };
+
+    response.json(responseJSON);
+  });
+
 
 // handling the base URL get requests
 app.get('/', (request, response) => {
