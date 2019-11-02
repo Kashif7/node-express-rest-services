@@ -14,6 +14,8 @@ bookRouter.route('/books')
     response.json(responseJSON);
   });
 
+app.use('/api', bookRouter);
+
 
 // handling the base URL get requests
 app.get('/', (request, response) => {
