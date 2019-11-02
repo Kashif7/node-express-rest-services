@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/Kashif7/node-express-rest-services#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.7.7"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
