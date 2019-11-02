@@ -6,16 +6,16 @@ const {
 
 const bookModel = new Schema({
   title: {
-    type: "string"
+    type: 'string'
   },
   author: {
-    type: "string"
+    type: 'string'
   },
   genre: {
-    type: "string"
+    type: 'string'
   },
   read: {
-    type: "boolean",
+    type: 'boolean',
     default: false
   }
 });
