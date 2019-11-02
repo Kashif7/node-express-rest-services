@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express();
 const db = mongoose.connect('mongodb://localhost/bookAPI');
@@ -7,8 +8,19 @@ const bookRouter = express.Router();
 const port = process.env.PORT || 3000;
 const Book = require('./models/bookModel');
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
 // books - get all
 bookRouter.route('/books')
+  .post((request, response) => {
+    const book = new Book(request.body);
+
+    console.log(book);
+    return response.json(book);
+  })
   .get((request, response) => {
     let query = {};
 
