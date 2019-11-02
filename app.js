@@ -7,10 +7,17 @@ const bookRouter = express.Router();
 const port = process.env.PORT || 3000;
 const Book = require('./models/bookModel');
 
-// setting up the books API
+// books - get all
 bookRouter.route('/books')
   .get((request, response) => {
-    Book.find((err, books) => {
+    let query = {};
+
+    if (request.query.genre) {
+      query = {
+        genre: request.query.genre
+      };
+    }
+    Book.find(query, (err, books) => {
       if (err) {
         return response.send(err);
       }
@@ -20,7 +27,6 @@ bookRouter.route('/books')
   });
 
 app.use('/api', bookRouter);
-
 
 // handling the base URL get requests
 app.get('/', (request, response) => {
