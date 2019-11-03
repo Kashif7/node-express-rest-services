@@ -17,9 +17,9 @@ app.use(bodyParser.json());
 bookRouter.route('/books')
   .post((request, response) => {
     const book = new Book(request.body);
+    book.save();
 
-    console.log(book);
-    return response.json(book);
+    return response.status(201).json(book);
   })
   .get((request, response) => {
     let query = {};
@@ -54,7 +54,8 @@ bookRouter.route('/books/:bookId')
     });
   });
 
-app.use('/api', bookRouter);
+app
+  .use('/api', bookRouter);
 
 // handling the base URL get requests
 app.get('/', (request, response) => {
