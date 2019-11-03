@@ -30,26 +30,31 @@ function routes(Book) {
       });
     });
 
+  bookRouter.use('/books/:bookId', (request, response, next) => {
+    const {
+      bookId
+    } = request.params;
+
+    Book.findById(bookId, (err, book) => {
+      if (err) {
+        return response.send(err);
+      }
+
+      if (book) {
+        request.book = book;
+        return next();
+      }
+
+      return response.statusCode(404);
+    });
+  });
+
   // books - get by id
   bookRouter.route('/books/:bookId')
-    .get((request, response) => {
-      const {
-        bookId
-      } = request.params;
-
-      Book.findById(bookId, (err, book) => {
-        if (err) {
-          return response.send(err);
-        }
-
-        return response.json(book);
-      });
-    })
+    .get((request, response) => response.json(request.book))
     .put((request, response) => {
       const {
-        params: {
-          bookId
-        },
+        book,
         body: {
           title,
           author,
@@ -58,20 +63,13 @@ function routes(Book) {
         }
       } = request;
 
-      Book.findById(bookId, (err, book) => {
-        if (err) {
-          return response.send(err);
-        }
+      book.title = title;
+      book.author = author;
+      book.genre = genre;
+      book.read = read;
 
-        book.title = title;
-        book.author = author;
-        book.genre = genre;
-        book.read = read;
-
-        book.save();
-
-        return response.json(book);
-      });
+      book.save();
+      return response.json(book);
     });
 
   return bookRouter;
