@@ -99,6 +99,16 @@ function routes(Book) {
 
         return response.json(book);
       });
+    }).delete((request, response) => {
+      const {
+        book
+      } = request;
+
+      book.remove((error) => {
+        if (error) return response.send(error);
+
+        return response.sendStatus(204);
+      });
     });
 
   return bookRouter;
