@@ -45,7 +45,7 @@ function routes(Book) {
         return next();
       }
 
-      return response.statusCode(404);
+      return response.sendStatus(404);
     });
   });
 
@@ -68,8 +68,37 @@ function routes(Book) {
       book.genre = genre;
       book.read = read;
 
-      book.save();
-      return response.json(book);
+      book.save((error) => {
+        if (error) return response.send(error);
+
+        return response.json(book);
+      });
+    }).patch((request, response) => {
+      const {
+        book,
+        body
+      } = request;
+
+      //  eslint-disable-next-line no-underscore-dangle
+      if (body._id) {
+        //  eslint-disable-next-line no-underscore-dangle
+        delete body._id;
+      }
+
+      Object.entries(body).forEach((entry) => {
+        const [
+          key,
+          value
+        ] = entry;
+
+        book[key] = value;
+      });
+
+      book.save((error) => {
+        if (error) return response.send(error);
+
+        return response.json(book);
+      });
     });
 
   return bookRouter;
