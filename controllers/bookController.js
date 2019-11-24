@@ -23,8 +23,9 @@ function bookController(Book) {
   function addBook(request, response) {
     const book = new Book(request.body);
     book.save();
-
-    return response.status(201).json(book);
+    response.status(201);
+    
+    return response.json(book);
   }
 
   function replaceBook(request, response) {
