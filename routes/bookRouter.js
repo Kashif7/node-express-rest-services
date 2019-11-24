@@ -1,34 +1,23 @@
 /* eslint-disable no-param-reassign */
 
 const express = require('express');
+const bookController = require('../controllers/bookController');
 
 function routes(Book) {
   const bookRouter = express.Router();
+  const {
+    getBooks,
+    getBook,
+    addBook,
+    replaceBook,
+    updateBook,
+    deleteBook
+  } = bookController(Book);
 
   // books - add and get all
   bookRouter.route('/books')
-    .post((request, response) => {
-      const book = new Book(request.body);
-      book.save();
-
-      return response.status(201).json(book);
-    })
-    .get((request, response) => {
-      let query = {};
-
-      if (request.query.genre) {
-        query = {
-          genre: request.query.genre
-        };
-      }
-      Book.find(query, (err, books) => {
-        if (err) {
-          return response.send(err);
-        }
-
-        return response.json(books);
-      });
-    });
+    .post(addBook)
+    .get(getBooks);
 
   bookRouter.use('/books/:bookId', (request, response, next) => {
     const {
@@ -51,65 +40,10 @@ function routes(Book) {
 
   // books - get by id
   bookRouter.route('/books/:bookId')
-    .get((request, response) => response.json(request.book))
-    .put((request, response) => {
-      const {
-        book,
-        body: {
-          title,
-          author,
-          genre,
-          read
-        }
-      } = request;
-
-      book.title = title;
-      book.author = author;
-      book.genre = genre;
-      book.read = read;
-
-      book.save((error) => {
-        if (error) return response.send(error);
-
-        return response.json(book);
-      });
-    }).patch((request, response) => {
-      const {
-        book,
-        body
-      } = request;
-
-      //  eslint-disable-next-line no-underscore-dangle
-      if (body._id) {
-        //  eslint-disable-next-line no-underscore-dangle
-        delete body._id;
-      }
-
-      Object.entries(body).forEach((entry) => {
-        const [
-          key,
-          value
-        ] = entry;
-
-        book[key] = value;
-      });
-
-      book.save((error) => {
-        if (error) return response.send(error);
-
-        return response.json(book);
-      });
-    }).delete((request, response) => {
-      const {
-        book
-      } = request;
-
-      book.remove((error) => {
-        if (error) return response.send(error);
-
-        return response.sendStatus(204);
-      });
-    });
+    .get(getBook)
+    .put(replaceBook)
+    .patch(updateBook)
+    .delete(deleteBook);
 
   return bookRouter;
 }
