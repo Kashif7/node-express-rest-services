@@ -21,6 +21,10 @@ function bookController(Book) {
   }
 
   function addBook(request, response) {
+    if (!request.body.title) {
+      return res.send('Title is Required');
+    }
+    
     const book = new Book(request.body);
     book.save();
     response.status(201);
