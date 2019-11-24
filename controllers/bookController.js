@@ -12,12 +12,26 @@ function bookController(Book) {
         return response.send(err);
       }
 
-      return response.json(books);
+      const booksWithSelfLinks = books.map((book) => {
+        const newBook = book.toJSON();
+        newBook.links = {};
+        newBook.links.self = `http://${request.headers.host}/api/books/${newBook._id}`;
+
+        return newBook;
+      });
+
+      return response.json(booksWithSelfLinks);
     });
   }
 
   function getBook(request, response) {
-    return response.json(request.book);
+    console.log(request);
+    const newBook = request.book.toJSON();
+    const genre = encodeURIComponent(newBook.genre);
+    newBook.links = {};
+    newBook.links.filterByGenre = `http://${request.headers.host}/api/books?genre=${genre}`;
+
+    return response.json(newBook);
   }
 
   function addBook(request, response) {
