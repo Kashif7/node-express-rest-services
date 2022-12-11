@@ -20,7 +20,7 @@
   "homepage": "https://github.com/Kashif7/node-express-rest-services#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mongoose": "^5.7.7",
     "supertest": "^4.0.2"
   },
